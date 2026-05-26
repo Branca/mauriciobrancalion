@@ -143,9 +143,10 @@
 
 /* ── OBRAS ────────────────────────────────────────── */
 #obras { padding: 6rem 4rem; }
-.obras-nav {
+.obras-tabs {
   display: flex; gap: 0; margin-bottom: 4rem;
   border-bottom: 1px solid var(--dim); overflow-x: auto;
+  position: relative; z-index: 1;
 }
 .obras-nav-btn {
   font-family: var(--mono); font-size: 0.65rem; letter-spacing: 0.15em;
@@ -376,9 +377,9 @@
     <div><h2>As<br>Obras</h2></div>
     <p>Uma seleção de trabalhos através de todas as linguagens. Use os filtros para navegar por universo.</p>
   </div>
-  <nav class="obras-nav" id="obras-nav">
+  <div class="obras-tabs" id="obras-nav">
     <!-- abas preenchidas via JS -->
-  </nav>
+  </div>
   <div id="obras-panels">
     <!-- painéis preenchidos via JS -->
   </div>
