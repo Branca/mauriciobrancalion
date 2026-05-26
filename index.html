@@ -436,8 +436,12 @@
 <section id="sobre">
   <div class="sobre-inner">
     <div class="sobre-visual reveal">
-      <div class="sobre-photo-placeholder" id="sobre-foto">
-        <div class="photo-label">Adicione aqui<br>sua foto ou<br>ilustração</div>
+      <div id="sobre-foto-wrapper" style="width:100%;aspect-ratio:3/4;position:relative;">
+        <img src="assets/images/artista.jpg" alt="Mauricio Brancalion" class="sobre-photo"
+          onerror="this.style.display='none';document.getElementById('sobre-foto-ph').style.display='flex'">
+        <div class="sobre-photo-placeholder" id="sobre-foto-ph" style="display:none;position:absolute;inset:0">
+          <div class="photo-label">Adicione aqui<br>sua foto ou<br>ilustração</div>
+        </div>
       </div>
       <div class="frame-tl"></div>
       <div class="frame-br"></div>
