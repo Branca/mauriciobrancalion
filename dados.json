@@ -1,0 +1,91 @@
+{
+  "artista": {
+    "nome": "Mauricio Brancalion",
+    "cidade": "Garopaba, Santa Catarina, Brasil",
+    "studio": "Estúdio Brancalion",
+    "bio_curta": "Artista, ilustrador, músico, animador, escritor. Um universo criativo em permanente expansão.",
+    "bio_longa": "Mauricio Brancalion cria desde sempre. Começou pelas tiras de humor, passou pela animação, chegou aos apps, games e à música — sem nunca abandonar nenhum caminho anterior. À beira do oceano em Garopaba, Santa Catarina, dirige o Estúdio Brancalion e desenvolve projetos que transitam entre o artesanal e o tecnológico, o popular e o experimental. Fundador da Editora Carayba, dedicada a quadrinhos e literatura com raízes na cultura Tupi-Guarani.",
+    "email": "contato@mauriciobrancalion.com.br",
+    "foto": "assets/images/artista.jpg",
+    "redes": [
+      { "nome": "Instagram", "url": "https://instagram.com/segundoucomorestes", "handle": "@segundoucomorestes" },
+      { "nome": "Instagram Studio", "url": "https://instagram.com/", "handle": "@estudiobrancalion" },
+      { "nome": "YouTube", "url": "https://youtube.com/", "handle": "YouTube" },
+      { "nome": "LinkedIn", "url": "https://linkedin.com/", "handle": "LinkedIn" }
+    ]
+  },
+  "universos": [
+    {
+      "id": "quadrinhos",
+      "titulo": "Quadrinhos & Humor Gráfico",
+      "num": "01",
+      "cor": "#c8963e",
+      "emoji": "✏️",
+      "descricao": "Tiras, graphic novels e humor de segunda — @segundoucomorestes. Publicações na Folha de São Paulo, fanzine Sagu, e o projeto Editora Carayba, focada em quadrinhos com raízes Tupi-Guarani.",
+      "destaque": true
+    },
+    {
+      "id": "animacao",
+      "titulo": "Animação",
+      "num": "02",
+      "cor": "#9e3d2b",
+      "emoji": "🎬",
+      "descricao": "2D, 3D, motion design e personagens em movimento. Projetos para marcas, plataformas educacionais e experimentos autorais.",
+      "destaque": false
+    },
+    {
+      "id": "musica",
+      "titulo": "Música",
+      "num": "03",
+      "cor": "#5a7a5e",
+      "emoji": "🎸",
+      "descricao": "Composições, voz e violão. MPB, folk e canções que nascem do mesmo lugar que os desenhos — da observação cotidiana.",
+      "destaque": false
+    },
+    {
+      "id": "games",
+      "titulo": "Games & Apps",
+      "num": "04",
+      "cor": "#8a9aaa",
+      "emoji": "🎮",
+      "descricao": "Desenvolvimento de jogos e aplicativos que mesclam design, narrativa e tecnologia. Do conceito ao deploy.",
+      "destaque": false
+    },
+    {
+      "id": "escrita",
+      "titulo": "Escrita & Editorial",
+      "num": "05",
+      "cor": "#c8963e",
+      "emoji": "📖",
+      "descricao": "Textos, roteiros e projetos editoriais. A Editora Carayba como laboratório literário e contra-cultural.",
+      "destaque": false
+    },
+    {
+      "id": "design",
+      "titulo": "Design & Ilustração",
+      "num": "06",
+      "cor": "#9e3d2b",
+      "emoji": "🎨",
+      "descricao": "Identidade visual, ilustração editorial, 3D e direção de arte para projetos nacionais e internacionais.",
+      "destaque": false
+    }
+  ],
+  "obras": {
+    "quadrinhos": [
+      {
+        "id": "q001",
+        "titulo": "Segundos como Restos — Vol. 1",
+        "ano": "2023",
+        "descricao": "Coletânea das tiras de segunda-feira publicadas no Instagram @segundoucomorestes.",
+        "imagem": "assets/images/obras/quadrinhos/q001.jpg",
+        "link": "",
+        "destaque": true
+      }
+    ],
+    "animacao": [],
+    "musica": [],
+    "games": [],
+    "escrita": [],
+    "design": []
+  }
+}

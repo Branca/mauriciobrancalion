@@ -1,0 +1,728 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Admin — Mauricio Brancalion</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@300;400&family=Bebas+Neue&family=Cormorant+Garamond:wght@300;400&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --ink: #0d0c0a; --paper: #f2ede6; --amber: #c8963e;
+  --dim: #3a3530; --mid: #6b6460; --dark2: #161410;
+  --mono: 'DM Mono', monospace; --display: 'Bebas Neue', sans-serif;
+  --serif: 'Cormorant Garamond', Georgia, serif;
+  --danger: #9e3d2b; --success: #5a7a5e;
+}
+body { background: var(--ink); color: var(--paper); font-family: var(--mono); font-size: 14px; min-height: 100vh; }
+
+/* LOGIN */
+#login-screen {
+  min-height: 100vh; display: flex; align-items: center; justify-content: center;
+  background: radial-gradient(ellipse 60% 60% at 50% 50%, rgba(200,150,62,0.06) 0%, transparent 70%);
+}
+.login-box { width: 100%; max-width: 400px; padding: 3rem; }
+.login-box h1 { font-family: var(--display); font-size: 2.5rem; letter-spacing: 0.05em; margin-bottom: 0.5rem; }
+.login-box p { color: var(--mid); font-size: 0.75rem; letter-spacing: 0.1em; margin-bottom: 3rem; }
+.field { margin-bottom: 1.5rem; }
+.field label { display: block; font-size: 0.65rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--mid); margin-bottom: 0.6rem; }
+.field input {
+  width: 100%; padding: 0.9rem 1rem; background: var(--dark2);
+  border: 1px solid var(--dim); color: var(--paper); font-family: var(--mono);
+  font-size: 0.85rem; outline: none; transition: border-color 0.3s;
+}
+.field input:focus { border-color: var(--amber); }
+.btn-login {
+  width: 100%; padding: 1rem; background: var(--amber); color: var(--ink);
+  border: none; font-family: var(--mono); font-size: 0.75rem;
+  letter-spacing: 0.2em; text-transform: uppercase; cursor: pointer;
+  transition: background 0.3s; margin-top: 0.5rem;
+}
+.btn-login:hover { background: #d4a44a; }
+.login-error { color: var(--danger); font-size: 0.7rem; margin-top: 1rem; letter-spacing: 0.1em; display: none; }
+
+/* ADMIN LAYOUT */
+#admin-screen { display: none; min-height: 100vh; }
+.admin-sidebar {
+  position: fixed; top: 0; left: 0; bottom: 0; width: 220px;
+  background: var(--dark2); border-right: 1px solid var(--dim);
+  padding: 2rem 1.5rem; display: flex; flex-direction: column; gap: 0.5rem;
+  z-index: 10;
+}
+.sidebar-logo { font-family: var(--display); font-size: 1.1rem; letter-spacing: 0.1em; margin-bottom: 2rem; color: var(--paper); }
+.sidebar-logo span { display: block; font-family: var(--mono); font-size: 0.6rem; color: var(--mid); letter-spacing: 0.15em; margin-top: 0.3rem; }
+.nav-item {
+  padding: 0.7rem 1rem; font-size: 0.65rem; letter-spacing: 0.15em;
+  text-transform: uppercase; color: var(--mid); cursor: pointer;
+  transition: color 0.2s, background 0.2s; border-left: 2px solid transparent;
+}
+.nav-item:hover { color: var(--paper); }
+.nav-item.active { color: var(--amber); border-left-color: var(--amber); background: rgba(200,150,62,0.05); }
+.sidebar-spacer { flex: 1; }
+.btn-logout {
+  padding: 0.7rem 1rem; font-size: 0.65rem; letter-spacing: 0.15em;
+  text-transform: uppercase; color: var(--mid); cursor: pointer;
+  background: none; border: 1px solid var(--dim); transition: color 0.2s, border-color 0.2s;
+}
+.btn-logout:hover { color: var(--danger); border-color: var(--danger); }
+
+.admin-main { margin-left: 220px; padding: 3rem; min-height: 100vh; }
+.admin-header { margin-bottom: 3rem; }
+.admin-header h2 { font-family: var(--display); font-size: 2.5rem; letter-spacing: 0.05em; }
+.admin-header p { color: var(--mid); font-size: 0.75rem; letter-spacing: 0.1em; margin-top: 0.5rem; }
+
+/* PANELS */
+.panel { display: none; }
+.panel.active { display: block; }
+
+/* OBRAS LIST */
+.obras-toolbar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem; flex-wrap: gap; }
+.universo-tabs { display: flex; gap: 0; flex-wrap: wrap; }
+.utab {
+  padding: 0.6rem 1.2rem; font-size: 0.62rem; letter-spacing: 0.12em;
+  text-transform: uppercase; cursor: pointer; background: none;
+  border: none; border-bottom: 2px solid transparent;
+  color: var(--mid); transition: color 0.2s;
+}
+.utab.active { color: var(--amber); border-bottom-color: var(--amber); }
+.utab:hover { color: var(--paper); }
+.btn-add {
+  padding: 0.7rem 1.5rem; background: var(--amber); color: var(--ink);
+  border: none; font-family: var(--mono); font-size: 0.65rem;
+  letter-spacing: 0.15em; text-transform: uppercase; cursor: pointer;
+  transition: background 0.2s; white-space: nowrap;
+}
+.btn-add:hover { background: #d4a44a; }
+
+.obras-list { display: flex; flex-direction: column; gap: 2px; }
+.obra-row {
+  background: var(--dark2); padding: 1.2rem 1.5rem;
+  display: grid; grid-template-columns: 60px 1fr auto auto auto;
+  gap: 1.5rem; align-items: center; border-left: 3px solid transparent;
+  transition: border-color 0.2s;
+}
+.obra-row:hover { border-left-color: var(--amber); }
+.obra-row-thumb {
+  width: 60px; height: 45px; object-fit: cover;
+  background: var(--dim); display: block;
+}
+.obra-row-thumb-ph { width: 60px; height: 45px; background: var(--dim); display: flex; align-items: center; justify-content: center; font-size: 0.5rem; color: var(--mid); }
+.obra-row-title { font-family: var(--serif); font-size: 1rem; }
+.obra-row-year { font-size: 0.6rem; color: var(--mid); letter-spacing: 0.1em; margin-top: 0.2rem; }
+.obra-destaque { font-size: 0.55rem; letter-spacing: 0.1em; color: var(--amber); text-transform: uppercase; }
+.btn-edit, .btn-del {
+  padding: 0.4rem 0.8rem; font-size: 0.6rem; letter-spacing: 0.1em;
+  text-transform: uppercase; cursor: pointer; border: 1px solid var(--dim);
+  background: none; transition: color 0.2s, border-color 0.2s; white-space: nowrap;
+}
+.btn-edit { color: var(--mid); }
+.btn-edit:hover { color: var(--paper); border-color: var(--paper); }
+.btn-del { color: var(--danger); border-color: rgba(158,61,43,0.3); }
+.btn-del:hover { border-color: var(--danger); }
+.empty-state { padding: 4rem 2rem; text-align: center; color: var(--mid); font-size: 0.75rem; letter-spacing: 0.1em; line-height: 2.5; }
+
+/* MODAL */
+.modal-overlay {
+  position: fixed; inset: 0; background: rgba(13,12,10,0.92);
+  z-index: 100; display: none; align-items: center; justify-content: center;
+  padding: 2rem;
+}
+.modal-overlay.open { display: flex; }
+.modal {
+  background: var(--dark2); border: 1px solid var(--dim);
+  width: 100%; max-width: 600px; max-height: 90vh; overflow-y: auto;
+  padding: 2.5rem;
+}
+.modal h3 { font-family: var(--display); font-size: 1.8rem; letter-spacing: 0.05em; margin-bottom: 2rem; }
+.modal .field { margin-bottom: 1.5rem; }
+.modal textarea {
+  width: 100%; padding: 0.9rem 1rem; background: var(--ink);
+  border: 1px solid var(--dim); color: var(--paper); font-family: var(--mono);
+  font-size: 0.85rem; outline: none; resize: vertical; min-height: 80px;
+  transition: border-color 0.3s;
+}
+.modal textarea:focus { border-color: var(--amber); }
+.modal select {
+  width: 100%; padding: 0.9rem 1rem; background: var(--ink);
+  border: 1px solid var(--dim); color: var(--paper); font-family: var(--mono);
+  font-size: 0.85rem; outline: none; cursor: pointer;
+}
+.modal-checkbox { display: flex; align-items: center; gap: 0.8rem; }
+.modal-checkbox input { width: 16px; height: 16px; accent-color: var(--amber); cursor: pointer; }
+.modal-actions { display: flex; gap: 1rem; margin-top: 2.5rem; }
+.btn-save {
+  flex: 1; padding: 1rem; background: var(--amber); color: var(--ink);
+  border: none; font-family: var(--mono); font-size: 0.7rem;
+  letter-spacing: 0.15em; text-transform: uppercase; cursor: pointer;
+  transition: background 0.2s;
+}
+.btn-save:hover { background: #d4a44a; }
+.btn-cancel {
+  padding: 1rem 2rem; background: none; border: 1px solid var(--dim);
+  color: var(--mid); font-family: var(--mono); font-size: 0.7rem;
+  letter-spacing: 0.15em; text-transform: uppercase; cursor: pointer;
+  transition: color 0.2s, border-color 0.2s;
+}
+.btn-cancel:hover { color: var(--paper); border-color: var(--paper); }
+
+/* SETTINGS */
+.settings-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; }
+.settings-section { background: var(--dark2); padding: 2rem; border: 1px solid var(--dim); }
+.settings-section h4 { font-family: var(--display); font-size: 1.3rem; letter-spacing: 0.05em; margin-bottom: 1.5rem; color: var(--amber); }
+.btn-settings-save {
+  margin-top: 1.5rem; padding: 0.8rem 2rem; background: var(--amber); color: var(--ink);
+  border: none; font-family: var(--mono); font-size: 0.65rem;
+  letter-spacing: 0.15em; text-transform: uppercase; cursor: pointer;
+  transition: background 0.2s; width: 100%;
+}
+.btn-settings-save:hover { background: #d4a44a; }
+
+/* TOAST */
+.toast {
+  position: fixed; bottom: 2rem; right: 2rem; background: var(--success);
+  color: white; padding: 0.8rem 1.5rem; font-size: 0.7rem; letter-spacing: 0.1em;
+  text-transform: uppercase; z-index: 200; opacity: 0;
+  transition: opacity 0.3s; pointer-events: none;
+}
+.toast.show { opacity: 1; }
+.toast.error { background: var(--danger); }
+
+/* UPLOAD AREA */
+.upload-area {
+  border: 2px dashed var(--dim); padding: 2rem; text-align: center;
+  cursor: pointer; transition: border-color 0.3s; position: relative;
+}
+.upload-area:hover, .upload-area.dragover { border-color: var(--amber); }
+.upload-area input[type=file] { position: absolute; inset: 0; opacity: 0; cursor: pointer; width: 100%; }
+.upload-area p { color: var(--mid); font-size: 0.7rem; letter-spacing: 0.1em; }
+.upload-area span { color: var(--amber); display: block; margin-bottom: 0.5rem; font-size: 0.8rem; }
+.upload-preview { margin-top: 1rem; max-height: 120px; object-fit: cover; display: none; width: 100%; }
+
+@media (max-width: 900px) {
+  .admin-sidebar { display: none; }
+  .admin-main { margin-left: 0; padding: 1.5rem; }
+  .settings-grid { grid-template-columns: 1fr; }
+  .obra-row { grid-template-columns: 50px 1fr; }
+  .obra-row-year, .obra-destaque { display: none; }
+}
+</style>
+</head>
+<body>
+
+<!-- LOGIN -->
+<div id="login-screen">
+  <div class="login-box">
+    <h1>ADMIN</h1>
+    <p>Mauricio Brancalion — Painel de controle</p>
+    <div class="field">
+      <label>Senha</label>
+      <input type="password" id="senha-input" placeholder="••••••••" autocomplete="current-password">
+    </div>
+    <button class="btn-login" onclick="fazerLogin()">Entrar</button>
+    <p class="login-error" id="login-error">Senha incorreta.</p>
+  </div>
+</div>
+
+<!-- ADMIN -->
+<div id="admin-screen">
+  <aside class="admin-sidebar">
+    <div class="sidebar-logo">MAURICIO<br>BRANCALION<span>painel admin</span></div>
+    <div class="nav-item active" onclick="mudarPanel('obras', this)">Obras</div>
+    <div class="nav-item" onclick="mudarPanel('artista', this)">Artista & Bio</div>
+    <div class="nav-item" onclick="mudarPanel('redes', this)">Redes Sociais</div>
+    <div class="nav-item" onclick="mudarPanel('export', this)">Exportar</div>
+    <div class="sidebar-spacer"></div>
+    <button class="btn-logout" onclick="sair()">Sair</button>
+  </aside>
+
+  <main class="admin-main">
+
+    <!-- PANEL: OBRAS -->
+    <div class="panel active" id="panel-obras">
+      <div class="admin-header">
+        <h2>Obras</h2>
+        <p>Gerencie todas as obras do portfólio por universo criativo</p>
+      </div>
+      <div class="obras-toolbar">
+        <div class="universo-tabs" id="universo-tabs"></div>
+        <button class="btn-add" onclick="abrirModal()">+ Adicionar obra</button>
+      </div>
+      <div class="obras-list" id="obras-list"></div>
+    </div>
+
+    <!-- PANEL: ARTISTA -->
+    <div class="panel" id="panel-artista">
+      <div class="admin-header">
+        <h2>Artista & Bio</h2>
+        <p>Edite as informações pessoais que aparecem na seção Sobre</p>
+      </div>
+      <div class="settings-section" style="max-width:600px">
+        <div class="field">
+          <label>Nome</label>
+          <input type="text" id="cfg-nome" class="field input">
+        </div>
+        <div class="field">
+          <label>Cidade / Studio</label>
+          <input type="text" id="cfg-cidade">
+        </div>
+        <div class="field">
+          <label>E-mail de contato</label>
+          <input type="email" id="cfg-email">
+        </div>
+        <div class="field">
+          <label>Bio completa</label>
+          <textarea id="cfg-bio" rows="6"></textarea>
+        </div>
+        <div class="field">
+          <label>Foto (URL ou caminho)</label>
+          <input type="text" id="cfg-foto" placeholder="assets/images/artista.jpg">
+        </div>
+        <button class="btn-settings-save" onclick="salvarArtista()">Salvar alterações</button>
+      </div>
+    </div>
+
+    <!-- PANEL: REDES -->
+    <div class="panel" id="panel-redes">
+      <div class="admin-header">
+        <h2>Redes Sociais</h2>
+        <p>Links que aparecem na seção de contato</p>
+      </div>
+      <div id="redes-list" style="max-width:600px; display:flex; flex-direction:column; gap:1rem;"></div>
+      <button class="btn-add" style="margin-top:1.5rem" onclick="adicionarRede()">+ Adicionar rede</button>
+      <button class="btn-settings-save" style="max-width:600px; margin-top:1.5rem; display:block" onclick="salvarRedes()">Salvar redes</button>
+    </div>
+
+    <!-- PANEL: EXPORT -->
+    <div class="panel" id="panel-export">
+      <div class="admin-header">
+        <h2>Exportar</h2>
+        <p>Baixe o arquivo dados.json atualizado para substituir no servidor</p>
+      </div>
+      <div class="settings-section" style="max-width:500px">
+        <h4>dados.json</h4>
+        <p style="color:var(--mid); font-size:0.75rem; line-height:2; margin-bottom:1.5rem">
+          Todas as alterações ficam salvas no navegador.<br>
+          Quando terminar de editar, exporte o JSON e<br>
+          faça upload via FTP para a raiz do seu site.
+        </p>
+        <button class="btn-settings-save" onclick="exportarJSON()">⬇ Baixar dados.json</button>
+        <div style="margin-top:2rem; border-top:1px solid var(--dim); padding-top:1.5rem">
+          <h4 style="font-size:1rem; margin-bottom:1rem">Preview JSON</h4>
+          <pre id="json-preview" style="font-size:0.6rem; color:var(--mid); max-height:300px; overflow:auto; line-height:1.6"></pre>
+        </div>
+      </div>
+    </div>
+
+  </main>
+</div>
+
+<!-- MODAL: OBRA -->
+<div class="modal-overlay" id="modal">
+  <div class="modal">
+    <h3 id="modal-titulo">Nova Obra</h3>
+    <div class="field">
+      <label>Universo</label>
+      <select id="obra-universo"></select>
+    </div>
+    <div class="field">
+      <label>Título</label>
+      <input type="text" id="obra-titulo" placeholder="Nome da obra">
+    </div>
+    <div class="field">
+      <label>Ano</label>
+      <input type="text" id="obra-ano" placeholder="2025">
+    </div>
+    <div class="field">
+      <label>Descrição</label>
+      <textarea id="obra-desc" placeholder="Breve descrição da obra..."></textarea>
+    </div>
+    <div class="field">
+      <label>Imagem</label>
+      <div class="upload-area" id="upload-area">
+        <span>📁</span>
+        <p>Arraste uma imagem ou clique para selecionar</p>
+        <p style="margin-top:0.3rem; font-size:0.6rem">JPG, PNG, GIF — máx. 5MB</p>
+        <input type="file" accept="image/*" id="obra-img-file" onchange="previewImagem(this)">
+      </div>
+      <img id="obra-img-preview" class="upload-preview">
+      <input type="text" id="obra-img-url" placeholder="Ou cole a URL da imagem" style="margin-top:0.5rem; width:100%; padding:0.7rem 1rem; background:var(--ink); border:1px solid var(--dim); color:var(--paper); font-family:var(--mono); font-size:0.8rem; outline:none;">
+    </div>
+    <div class="field">
+      <label>Link externo (opcional)</label>
+      <input type="url" id="obra-link" placeholder="https://...">
+    </div>
+    <div class="field modal-checkbox">
+      <input type="checkbox" id="obra-destaque">
+      <label for="obra-destaque" style="cursor:pointer">Marcar como destaque</label>
+    </div>
+    <div class="modal-actions">
+      <button class="btn-save" onclick="salvarObra()">Salvar obra</button>
+      <button class="btn-cancel" onclick="fecharModal()">Cancelar</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+// ── CONFIG ──────────────────────────────────────────────────────
+const SENHA = 'brancalion2025'; // TROQUE ESTA SENHA
+
+const UNIVERSOS = [
+  { id:'quadrinhos', titulo:'Quadrinhos', cor:'#c8963e' },
+  { id:'animacao',   titulo:'Animação',   cor:'#9e3d2b' },
+  { id:'musica',     titulo:'Música',     cor:'#5a7a5e' },
+  { id:'games',      titulo:'Games',      cor:'#8a9aaa' },
+  { id:'escrita',    titulo:'Escrita',    cor:'#c8963e' },
+  { id:'design',     titulo:'Design',     cor:'#9e3d2b' }
+];
+
+// ── ESTADO ──────────────────────────────────────────────────────
+let dados = null;
+let universoAtivo = 'quadrinhos';
+let editandoId = null;
+let imgBase64 = null;
+
+// ── INIT ────────────────────────────────────────────────────────
+window.addEventListener('DOMContentLoaded', () => {
+  const salvo = localStorage.getItem('mb_dados');
+  if (salvo) {
+    dados = JSON.parse(salvo);
+  } else {
+    fetch('../dados.json')
+      .then(r => r.json())
+      .then(d => { dados = d; renderAdmin(); })
+      .catch(() => { dados = criarDadosVazios(); renderAdmin(); });
+    return;
+  }
+  renderAdmin();
+
+  document.getElementById('senha-input').addEventListener('keydown', e => {
+    if (e.key === 'Enter') fazerLogin();
+  });
+});
+
+function criarDadosVazios() {
+  const obras = {};
+  UNIVERSOS.forEach(u => obras[u.id] = []);
+  return {
+    artista: {
+      nome: 'Mauricio Brancalion',
+      cidade: 'Garopaba, Santa Catarina, Brasil',
+      studio: 'Estúdio Brancalion',
+      bio_curta: 'Artista multimídia. Um universo criativo em permanente expansão.',
+      bio_longa: '',
+      email: 'contato@mauriciobrancalion.com.br',
+      foto: 'assets/images/artista.jpg',
+      redes: [
+        { nome:'Instagram', url:'https://instagram.com/segundoucomorestes', handle:'@segundoucomorestes' }
+      ]
+    },
+    universos: UNIVERSOS.map((u,i) => ({
+      id: u.id, titulo: u.titulo, num: String(i+1).padStart(2,'0'),
+      cor: u.cor, emoji: '✏️', descricao: '', destaque: i === 0
+    })),
+    obras
+  };
+}
+
+// ── AUTH ────────────────────────────────────────────────────────
+function fazerLogin() {
+  const v = document.getElementById('senha-input').value;
+  if (v === SENHA) {
+    document.getElementById('login-screen').style.display = 'none';
+    document.getElementById('admin-screen').style.display = 'block';
+    renderAdmin();
+  } else {
+    document.getElementById('login-error').style.display = 'block';
+  }
+}
+function sair() {
+  document.getElementById('admin-screen').style.display = 'none';
+  document.getElementById('login-screen').style.display = 'flex';
+  document.getElementById('senha-input').value = '';
+}
+
+// ── PANELS ──────────────────────────────────────────────────────
+function mudarPanel(id, el) {
+  document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  document.getElementById('panel-' + id).classList.add('active');
+  el.classList.add('active');
+  if (id === 'export') atualizarPreview();
+  if (id === 'artista') preencherArtista();
+  if (id === 'redes') renderRedes();
+}
+
+// ── RENDER ADMIN ─────────────────────────────────────────────────
+function renderAdmin() {
+  if (!dados) return;
+  renderTabs();
+  renderObras();
+  renderSelect();
+}
+
+function renderTabs() {
+  const tabs = document.getElementById('universo-tabs');
+  tabs.innerHTML = '';
+  UNIVERSOS.forEach(u => {
+    const btn = document.createElement('button');
+    btn.className = 'utab' + (u.id === universoAtivo ? ' active' : '');
+    btn.textContent = u.titulo;
+    btn.onclick = () => {
+      universoAtivo = u.id;
+      document.querySelectorAll('.utab').forEach(t => t.classList.remove('active'));
+      btn.classList.add('active');
+      renderObras();
+    };
+    tabs.appendChild(btn);
+  });
+}
+
+function renderObras() {
+  const list = document.getElementById('obras-list');
+  const obras = dados.obras[universoAtivo] || [];
+  if (obras.length === 0) {
+    list.innerHTML = `<div class="empty-state">Nenhuma obra em <strong style="color:var(--amber)">${universoAtivo}</strong> ainda.<br>Clique em "+ Adicionar obra" para começar.</div>`;
+    return;
+  }
+  list.innerHTML = '';
+  obras.forEach(o => {
+    const row = document.createElement('div');
+    row.className = 'obra-row';
+    const thumb = o.imagem
+      ? `<img src="${o.imagem.startsWith('data:') ? o.imagem : '../' + o.imagem}" class="obra-row-thumb" onerror="this.style.display='none'">`
+      : `<div class="obra-row-thumb-ph">sem img</div>`;
+    row.innerHTML = `
+      ${thumb}
+      <div>
+        <div class="obra-row-title">${o.titulo}</div>
+        <div class="obra-row-year">${o.ano}</div>
+        ${o.destaque ? '<div class="obra-destaque">★ destaque</div>' : ''}
+      </div>
+      <div style="font-size:0.6rem;color:var(--mid)">${o.universo || universoAtivo}</div>
+      <button class="btn-edit" onclick="editarObra('${o.id}')">Editar</button>
+      <button class="btn-del" onclick="deletarObra('${o.id}')">Remover</button>`;
+    list.appendChild(row);
+  });
+}
+
+function renderSelect() {
+  const sel = document.getElementById('obra-universo');
+  sel.innerHTML = '';
+  UNIVERSOS.forEach(u => {
+    const opt = document.createElement('option');
+    opt.value = u.id;
+    opt.textContent = u.titulo;
+    if (u.id === universoAtivo) opt.selected = true;
+    sel.appendChild(opt);
+  });
+}
+
+// ── MODAL ────────────────────────────────────────────────────────
+function abrirModal(id) {
+  editandoId = id || null;
+  imgBase64 = null;
+  document.getElementById('obra-img-preview').style.display = 'none';
+  document.getElementById('modal-titulo').textContent = id ? 'Editar Obra' : 'Nova Obra';
+
+  if (id) {
+    let obra = null;
+    UNIVERSOS.forEach(u => {
+      const found = (dados.obras[u.id] || []).find(o => o.id === id);
+      if (found) obra = found;
+    });
+    if (obra) {
+      document.getElementById('obra-universo').value = obra.universo || universoAtivo;
+      document.getElementById('obra-titulo').value = obra.titulo;
+      document.getElementById('obra-ano').value = obra.ano;
+      document.getElementById('obra-desc').value = obra.descricao || '';
+      document.getElementById('obra-img-url').value = obra.imagem && !obra.imagem.startsWith('data:') ? obra.imagem : '';
+      document.getElementById('obra-link').value = obra.link || '';
+      document.getElementById('obra-destaque').checked = !!obra.destaque;
+      if (obra.imagem) {
+        const prev = document.getElementById('obra-img-preview');
+        prev.src = obra.imagem.startsWith('data:') ? obra.imagem : '../' + obra.imagem;
+        prev.style.display = 'block';
+      }
+    }
+  } else {
+    document.getElementById('obra-universo').value = universoAtivo;
+    document.getElementById('obra-titulo').value = '';
+    document.getElementById('obra-ano').value = new Date().getFullYear();
+    document.getElementById('obra-desc').value = '';
+    document.getElementById('obra-img-url').value = '';
+    document.getElementById('obra-link').value = '';
+    document.getElementById('obra-destaque').checked = false;
+  }
+  document.getElementById('modal').classList.add('open');
+}
+
+function fecharModal() {
+  document.getElementById('modal').classList.remove('open');
+  editandoId = null;
+}
+
+function previewImagem(input) {
+  const file = input.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = e => {
+    imgBase64 = e.target.result;
+    const prev = document.getElementById('obra-img-preview');
+    prev.src = imgBase64;
+    prev.style.display = 'block';
+  };
+  reader.readAsDataURL(file);
+}
+
+function salvarObra() {
+  const titulo = document.getElementById('obra-titulo').value.trim();
+  if (!titulo) { toast('Título obrigatório', true); return; }
+
+  const universo = document.getElementById('obra-universo').value;
+  const imgUrl = document.getElementById('obra-img-url').value.trim();
+  const imagem = imgBase64 || imgUrl || '';
+
+  const obra = {
+    id: editandoId || 'o' + Date.now(),
+    titulo,
+    universo,
+    ano: document.getElementById('obra-ano').value || String(new Date().getFullYear()),
+    descricao: document.getElementById('obra-desc').value.trim(),
+    imagem,
+    link: document.getElementById('obra-link').value.trim(),
+    destaque: document.getElementById('obra-destaque').checked
+  };
+
+  if (!dados.obras[universo]) dados.obras[universo] = [];
+
+  if (editandoId) {
+    // remove de todos os universos (pode ter mudado de universo)
+    UNIVERSOS.forEach(u => {
+      dados.obras[u.id] = (dados.obras[u.id] || []).filter(o => o.id !== editandoId);
+    });
+  }
+
+  dados.obras[universo].push(obra);
+  universoAtivo = universo;
+  salvarLocal();
+  renderTabs();
+  renderObras();
+  fecharModal();
+  toast('Obra salva!');
+}
+
+function editarObra(id) { abrirModal(id); }
+
+function deletarObra(id) {
+  if (!confirm('Remover esta obra?')) return;
+  UNIVERSOS.forEach(u => {
+    dados.obras[u.id] = (dados.obras[u.id] || []).filter(o => o.id !== id);
+  });
+  salvarLocal();
+  renderObras();
+  toast('Obra removida');
+}
+
+// ── ARTISTA ──────────────────────────────────────────────────────
+function preencherArtista() {
+  document.getElementById('cfg-nome').value = dados.artista.nome || '';
+  document.getElementById('cfg-cidade').value = dados.artista.cidade || '';
+  document.getElementById('cfg-email').value = dados.artista.email || '';
+  document.getElementById('cfg-bio').value = dados.artista.bio_longa || '';
+  document.getElementById('cfg-foto').value = dados.artista.foto || '';
+}
+function salvarArtista() {
+  dados.artista.nome = document.getElementById('cfg-nome').value;
+  dados.artista.cidade = document.getElementById('cfg-cidade').value;
+  dados.artista.email = document.getElementById('cfg-email').value;
+  dados.artista.bio_longa = document.getElementById('cfg-bio').value;
+  dados.artista.foto = document.getElementById('cfg-foto').value;
+  salvarLocal();
+  toast('Artista salvo!');
+}
+
+// ── REDES ─────────────────────────────────────────────────────────
+function renderRedes() {
+  const list = document.getElementById('redes-list');
+  list.innerHTML = '';
+  (dados.artista.redes || []).forEach((r, i) => {
+    const div = document.createElement('div');
+    div.style = 'background:var(--dark2);padding:1.5rem;border:1px solid var(--dim);display:grid;grid-template-columns:1fr 1fr auto;gap:1rem;align-items:end';
+    div.innerHTML = `
+      <div class="field" style="margin:0">
+        <label>Handle</label>
+        <input type="text" value="${r.handle}" data-i="${i}" data-field="handle" oninput="updateRede(this)">
+      </div>
+      <div class="field" style="margin:0">
+        <label>URL</label>
+        <input type="url" value="${r.url}" data-i="${i}" data-field="url" oninput="updateRede(this)">
+      </div>
+      <button class="btn-del" onclick="removerRede(${i})" style="height:38px">×</button>`;
+    list.appendChild(div);
+  });
+}
+function updateRede(el) {
+  dados.artista.redes[el.dataset.i][el.dataset.field] = el.value;
+}
+function adicionarRede() {
+  dados.artista.redes.push({ nome:'', url:'', handle:'' });
+  renderRedes();
+}
+function removerRede(i) {
+  dados.artista.redes.splice(i, 1);
+  renderRedes();
+}
+function salvarRedes() { salvarLocal(); toast('Redes salvas!'); }
+
+// ── EXPORT ────────────────────────────────────────────────────────
+function atualizarPreview() {
+  document.getElementById('json-preview').textContent = JSON.stringify(dados, null, 2).substring(0, 2000) + '\n...';
+}
+function exportarJSON() {
+  const blob = new Blob([JSON.stringify(dados, null, 2)], { type: 'application/json' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'dados.json';
+  a.click();
+  toast('dados.json exportado!');
+}
+
+// ── UTILS ─────────────────────────────────────────────────────────
+function salvarLocal() {
+  localStorage.setItem('mb_dados', JSON.stringify(dados));
+}
+function toast(msg, err = false) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.className = 'toast show' + (err ? ' error' : '');
+  setTimeout(() => t.className = 'toast', 2500);
+}
+
+// Fechar modal clicando fora
+document.getElementById('modal').addEventListener('click', e => {
+  if (e.target === document.getElementById('modal')) fecharModal();
+});
+
+// Drag & drop na área de upload
+const ua = document.getElementById('upload-area');
+ua.addEventListener('dragover', e => { e.preventDefault(); ua.classList.add('dragover'); });
+ua.addEventListener('dragleave', () => ua.classList.remove('dragover'));
+ua.addEventListener('drop', e => {
+  e.preventDefault(); ua.classList.remove('dragover');
+  const file = e.dataTransfer.files[0];
+  if (file && file.type.startsWith('image/')) {
+    const reader = new FileReader();
+    reader.onload = ev => {
+      imgBase64 = ev.target.result;
+      const prev = document.getElementById('obra-img-preview');
+      prev.src = imgBase64; prev.style.display = 'block';
+    };
+    reader.readAsDataURL(file);
+  }
+});
+</script>
+</body>
+</html>
