@@ -58,14 +58,38 @@
 .hero-right {
   position: relative; display: flex;
   align-items: center; justify-content: center; z-index: 2;
+  padding: 6rem 3rem 4rem 1rem;
 }
-.hero-disciplines { display: flex; flex-direction: column; gap: 0.2rem; padding: 4rem 2rem; }
+.hero-right-inner {
+  display: grid;
+  grid-template-columns: 160px 1fr;
+  gap: 2.5rem;
+  align-items: center;
+  width: 100%;
+}
+.hero-photo-wrap {
+  position: relative;
+  opacity: 0; animation: fadeUp 0.8s ease 0.6s forwards;
+}
+.hero-photo {
+  width: 160px; height: 210px; object-fit: cover;
+  display: block; filter: grayscale(0.1);
+}
+.hero-photo-ph {
+  width: 160px; height: 210px; background: var(--dim);
+  display: flex; align-items: center; justify-content: center;
+}
+.hero-photo-ph span { font-family: var(--mono); font-size: 0.55rem; color: var(--mid); letter-spacing: 0.1em; text-align:center; line-height:1.8; }
+.hero-photo-frame-tl { position: absolute; top: -8px; left: -8px; width: 30px; height: 30px; border-top: 2px solid var(--amber); border-left: 2px solid var(--amber); opacity: 0.5; }
+.hero-photo-frame-br { position: absolute; bottom: -8px; right: -8px; width: 30px; height: 30px; border-bottom: 2px solid var(--amber); border-right: 2px solid var(--amber); opacity: 0.5; }
+
+.hero-disciplines { display: flex; flex-direction: column; gap: 0.1rem; }
 .discipline-item {
   font-family: var(--display);
-  font-size: clamp(1.8rem, 3.2vw, 3rem);
+  font-size: clamp(1.4rem, 2.4vw, 2.4rem);
   letter-spacing: 0.05em; color: var(--dim);
-  transition: color 0.3s, transform 0.3s; cursor: none;
-  display: flex; align-items: center; gap: 1rem;
+  transition: color 0.5s ease, transform 0.5s ease; cursor: default;
+  display: flex; align-items: center; gap: 0.8rem;
   opacity: 0; animation: slideRight 0.6s ease forwards;
 }
 .discipline-item:nth-child(1){animation-delay:0.6s}
@@ -75,11 +99,12 @@
 .discipline-item:nth-child(5){animation-delay:1.2s}
 .discipline-item:nth-child(6){animation-delay:1.35s}
 .discipline-item:nth-child(7){animation-delay:1.5s}
-.discipline-item:hover { color: var(--paper); transform: translateX(12px); }
-.discipline-item:hover .d-num { color: var(--amber); }
+.discipline-item.lit { color: var(--amber); transform: translateX(8px); }
+.discipline-item.lit .d-num { color: var(--amber); opacity: 1; }
 .d-num {
-  font-family: var(--mono); font-size: 0.6rem;
-  color: transparent; transition: color 0.3s; min-width: 28px;
+  font-family: var(--mono); font-size: 0.55rem;
+  color: transparent; opacity: 0;
+  transition: color 0.5s, opacity 0.5s; min-width: 24px;
 }
 
 /* ── MANIFESTO ────────────────────────────────────── */
@@ -320,14 +345,25 @@
     </div>
   </div>
   <div class="hero-right">
-    <div class="hero-disciplines">
-      <div class="discipline-item"><span class="d-num">01</span>Quadrinhos</div>
-      <div class="discipline-item"><span class="d-num">02</span>Animação</div>
-      <div class="discipline-item"><span class="d-num">03</span>Ilustração</div>
-      <div class="discipline-item"><span class="d-num">04</span>Música</div>
-      <div class="discipline-item"><span class="d-num">05</span>Games</div>
-      <div class="discipline-item"><span class="d-num">06</span>Apps</div>
-      <div class="discipline-item"><span class="d-num">07</span>Design</div>
+    <div class="hero-right-inner">
+      <div class="hero-photo-wrap">
+        <img src="images/artista.jpg" alt="Mauricio Brancalion" class="hero-photo"
+          onerror="this.style.display='none';document.getElementById('hero-photo-ph').style.display='flex'">
+        <div class="hero-photo-ph" id="hero-photo-ph" style="display:none">
+          <span>sua<br>foto<br>aqui</span>
+        </div>
+        <div class="hero-photo-frame-tl"></div>
+        <div class="hero-photo-frame-br"></div>
+      </div>
+      <div class="hero-disciplines">
+        <div class="discipline-item"><span class="d-num">01</span>Quadrinhos</div>
+        <div class="discipline-item"><span class="d-num">02</span>Animação</div>
+        <div class="discipline-item"><span class="d-num">03</span>Ilustração</div>
+        <div class="discipline-item"><span class="d-num">04</span>Música</div>
+        <div class="discipline-item"><span class="d-num">05</span>Games</div>
+        <div class="discipline-item"><span class="d-num">06</span>Apps</div>
+        <div class="discipline-item"><span class="d-num">07</span>Design</div>
+      </div>
     </div>
   </div>
 </section>
@@ -500,7 +536,6 @@ fetch('dados.json')
       a.style.setProperty('--card-color', u.cor);
       a.innerHTML = `
         <div class="card-num">${u.num} — ${u.titulo.split('&')[0].trim()}</div>
-        <span class="card-icon">${u.emoji}</span>
         <div class="card-title">${u.titulo}</div>
         <p class="card-desc">${u.descricao}</p>
         <span class="card-arrow">↗</span>`;
@@ -582,6 +617,23 @@ fetch('dados.json')
     }
   })
   .catch(() => console.warn('dados.json não encontrado — usando conteúdo estático.'));
+
+// ── ANIMAÇÃO DAS DISCIPLINAS ─────────────────────────
+(function() {
+  const items = document.querySelectorAll('.discipline-item');
+  if (!items.length) return;
+  let atual = 0;
+  function acender() {
+    items.forEach(el => el.classList.remove('lit'));
+    items[atual].classList.add('lit');
+    atual = (atual + 1) % items.length;
+  }
+  // Começa depois das animações de entrada
+  setTimeout(() => {
+    acender();
+    setInterval(acender, 1800);
+  }, 2000);
+})();
 </script>
 </body>
 </html>
