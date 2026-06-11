@@ -1,641 +1,295 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="description" content="Mauricio Brancalion — Artista multimídia. Quadrinhos, animação, música, games, design e escrita. Garopaba, Brasil.">
-<meta property="og:title" content="Mauricio Brancalion">
-<meta property="og:description" content="Artista multimídia. Um universo criativo em permanente expansão.">
-<meta property="og:image" content="assets/images/og-image.jpg">
-<title>Mauricio Brancalion</title>
-<link rel="stylesheet" href="assets/css/base.css">
-<style>
-/* ── HERO ─────────────────────────────────────────── */
-#hero {
-  min-height: 100vh;
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  position: relative;
-  overflow: hidden;
-}
-.hero-bg {
-  position: absolute; inset: 0;
-  background:
-    radial-gradient(ellipse 60% 80% at 70% 50%, rgba(200,150,62,0.06) 0%, transparent 70%),
-    radial-gradient(ellipse 40% 50% at 20% 80%, rgba(158,61,43,0.08) 0%, transparent 60%);
-}
-.hero-grain {
-  position: absolute; inset: 0; opacity: 0.035;
-  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
-  background-size: 256px;
-}
-.hero-left {
-  display: flex; flex-direction: column; justify-content: center;
-  padding: 8rem 4rem 6rem; position: relative; z-index: 2;
-}
-.hero-eyebrow {
-  font-family: var(--mono); font-size: 0.65rem;
-  letter-spacing: 0.25em; text-transform: uppercase;
-  color: var(--amber); margin-bottom: 2rem;
-  opacity: 0; animation: fadeUp 0.8s ease 0.3s forwards;
-}
-.hero-name {
-  font-family: var(--display);
-  font-size: clamp(3.5rem, 7vw, 7rem);
-  line-height: 0.92; letter-spacing: 0.02em; color: var(--paper);
-  opacity: 0; animation: fadeUp 0.8s ease 0.5s forwards;
-}
-.hero-name span { display: block; color: var(--amber); }
-.hero-tagline {
-  margin-top: 2.5rem; font-size: 1.15rem; font-weight: 300;
-  font-style: italic; color: rgba(242,237,230,0.65); max-width: 380px;
-  line-height: 1.7; opacity: 0; animation: fadeUp 0.8s ease 0.7s forwards;
-}
-.hero-cta {
-  margin-top: 3.5rem; display: flex; gap: 1.5rem; align-items: center;
-  opacity: 0; animation: fadeUp 0.8s ease 0.9s forwards;
-}
-.hero-right {
-  position: relative; display: flex;
-  align-items: center; justify-content: center; z-index: 2;
-  padding: 6rem 3rem 4rem 1rem;
-}
-.hero-right-inner {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 3rem;
-  align-items: center;
-  width: 100%;
-}
-.hero-photo-wrap {
-  position: relative;
-  opacity: 0; animation: fadeUp 0.8s ease 0.6s forwards;
-}
-.hero-photo {
-  width: 100%; height: 70vh; max-height: 520px;
-  object-fit: cover; object-position: center top;
-  display: block; filter: grayscale(0.1);
-}
-.hero-photo-ph {
-  width: 100%; height: 70vh; max-height: 520px;
-  background: var(--dim);
-  display: flex; align-items: center; justify-content: center;
-}
-.hero-photo-ph span { font-family: var(--mono); font-size: 0.55rem; color: var(--mid); letter-spacing: 0.1em; text-align:center; line-height:1.8; }
-.hero-photo-frame-tl { position: absolute; top: -10px; left: -10px; width: 40px; height: 40px; border-top: 2px solid var(--amber); border-left: 2px solid var(--amber); opacity: 0.5; }
-.hero-photo-frame-br { position: absolute; bottom: -10px; right: -10px; width: 40px; height: 40px; border-bottom: 2px solid var(--amber); border-right: 2px solid var(--amber); opacity: 0.5; }
-
-.hero-disciplines { display: flex; flex-direction: column; gap: 0.1rem; }
-.discipline-item {
-  font-family: var(--display);
-  font-size: clamp(1.6rem, 2.8vw, 2.8rem);
-  letter-spacing: 0.05em; color: var(--dim);
-  transition: color 0.5s ease, transform 0.5s ease; cursor: default;
-  display: flex; align-items: center; gap: 0.8rem;
-  opacity: 0; animation: slideRight 0.6s ease forwards;
-}
-.discipline-item:nth-child(1){animation-delay:0.6s}
-.discipline-item:nth-child(2){animation-delay:0.75s}
-.discipline-item:nth-child(3){animation-delay:0.9s}
-.discipline-item:nth-child(4){animation-delay:1.05s}
-.discipline-item:nth-child(5){animation-delay:1.2s}
-.discipline-item:nth-child(6){animation-delay:1.35s}
-.discipline-item:nth-child(7){animation-delay:1.5s}
-.discipline-item.lit { color: var(--amber); transform: translateX(10px); }
-.discipline-item.lit .d-num { color: var(--amber); opacity: 1; }
-.d-num {
-  font-family: var(--mono); font-size: 0.55rem;
-  color: transparent; opacity: 0;
-  transition: color 0.5s, opacity 0.5s; min-width: 24px;
-}
-
-/* ── MANIFESTO ────────────────────────────────────── */
-#manifesto { padding: 8rem 4rem; max-width: 900px; margin: 0 auto; text-align: center; }
-.manifesto-text {
-  font-size: clamp(1.4rem, 2.8vw, 2.1rem);
-  font-weight: 300; line-height: 1.7;
-  color: rgba(242,237,230,0.85); font-style: italic;
-}
-.manifesto-text strong { font-style: normal; font-weight: 600; color: var(--paper); }
-.manifesto-sub {
-  margin-top: 3rem; font-family: var(--mono); font-size: 0.8rem;
-  color: var(--mid); letter-spacing: 0.08em; line-height: 2;
-}
-
-/* ── UNIVERSOS ────────────────────────────────────── */
-#universos { padding: 6rem 4rem; }
-.universos-intro {
-  display: grid; grid-template-columns: 1fr 1fr;
-  gap: 4rem; margin-bottom: 5rem; align-items: end;
-}
-.universos-intro h2 {
-  font-family: var(--display); font-size: clamp(3rem, 5vw, 5rem); line-height: 0.95;
-}
-.universos-intro p {
-  font-size: 1rem; font-weight: 300; color: rgba(242,237,230,0.6);
-  line-height: 1.8; font-family: var(--mono);
-}
-.universos-grid {
-  display: grid; grid-template-columns: repeat(3, 1fr);
-  gap: 1px; background: var(--dim);
-}
-.universo-card {
-  background: var(--ink); padding: 3rem 2.5rem;
-  position: relative; overflow: hidden; cursor: none;
-  transition: background 0.4s; text-decoration: none;
-  color: inherit; display: block;
-}
-.universo-card:hover { background: #141210; }
-.universo-card::after {
-  content: ''; position: absolute; bottom: 0; left: 0;
-  height: 3px; width: 0;
-  background: var(--card-color, var(--amber));
-  transition: width 0.4s ease;
-}
-.universo-card:hover::after { width: 100%; }
-.universo-card.wide { grid-column: span 2; }
-.card-num { font-family: var(--mono); font-size: 0.6rem; color: var(--dim); letter-spacing: 0.2em; margin-bottom: 2rem; }
-.card-icon { font-size: 2rem; margin-bottom: 1.5rem; display: block; }
-.card-title {
-  font-family: var(--display); font-size: 2rem; letter-spacing: 0.05em;
-  margin-bottom: 1rem; color: var(--paper); transition: color 0.3s;
-}
-.universo-card:hover .card-title { color: var(--card-color, var(--amber)); }
-.card-desc { font-size: 0.85rem; color: var(--mid); line-height: 1.7; font-weight: 300; max-width: 320px; }
-.card-arrow {
-  position: absolute; bottom: 2.5rem; right: 2.5rem;
-  font-size: 1.2rem; color: var(--dim); transition: transform 0.3s, color 0.3s;
-}
-.universo-card:hover .card-arrow { transform: translate(4px,-4px); color: var(--card-color, var(--amber)); }
-
-/* ── OBRAS ────────────────────────────────────────── */
-#obras { padding: 6rem 4rem; }
-.obras-tabs {
-  display: flex; gap: 0; margin-bottom: 4rem;
-  border-bottom: 1px solid var(--dim); overflow-x: auto;
-  position: relative; z-index: 1;
-}
-.obras-nav-btn {
-  font-family: var(--mono); font-size: 0.65rem; letter-spacing: 0.15em;
-  text-transform: uppercase; padding: 1rem 1.5rem;
-  background: none; border: none; color: var(--mid);
-  cursor: none; transition: color 0.3s;
-  border-bottom: 2px solid transparent; margin-bottom: -1px;
-  white-space: nowrap;
-}
-.obras-nav-btn:hover { color: var(--paper); }
-.obras-nav-btn.active { color: var(--amber); border-bottom-color: var(--amber); }
-.obras-panel { display: none; }
-.obras-panel.active { display: block; }
-.obras-grid {
-  display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-  gap: 2px; background: var(--dim);
-}
-.obra-card {
-  background: var(--ink); position: relative; overflow: hidden;
-  cursor: none; aspect-ratio: 4/3; display: flex; align-items: flex-end;
-}
-.obra-card img {
-  position: absolute; inset: 0; width: 100%; height: 100%;
-  object-fit: cover; transition: transform 0.5s ease, filter 0.4s;
-  filter: grayscale(0.2);
-}
-.obra-card:hover img { transform: scale(1.04); filter: grayscale(0); }
-.obra-info {
-  position: relative; z-index: 2; padding: 1.5rem;
-  background: linear-gradient(to top, rgba(13,12,10,0.95) 0%, transparent 100%);
-  width: 100%; transform: translateY(6px);
-  transition: transform 0.3s;
-}
-.obra-card:hover .obra-info { transform: translateY(0); }
-.obra-titulo { font-family: var(--display); font-size: 1.2rem; letter-spacing: 0.05em; }
-.obra-ano { font-family: var(--mono); font-size: 0.6rem; color: var(--amber); letter-spacing: 0.15em; margin-top: 0.3rem; }
-.obra-placeholder {
-  position: absolute; inset: 0; background: var(--dim);
-  display: flex; align-items: center; justify-content: center;
-}
-.obra-placeholder-txt { font-family: var(--mono); font-size: 0.65rem; color: var(--mid); letter-spacing: 0.15em; }
-.obras-vazio {
-  padding: 6rem 2rem; text-align: center;
-  font-family: var(--mono); font-size: 0.8rem; color: var(--dim);
-  letter-spacing: 0.1em; line-height: 2.5;
-}
-
-/* ── PROCESSO ─────────────────────────────────────── */
-#processo {
-  padding: 8rem 4rem;
-  background: linear-gradient(180deg, transparent 0%, rgba(200,150,62,0.03) 50%, transparent 100%);
-}
-.processo-inner { max-width: 1100px; margin: 0 auto; }
-.processo-grid { display: grid; grid-template-columns: 1fr 2fr; gap: 6rem; margin-top: 4rem; }
-.processo-sticky { position: sticky; top: 6rem; }
-.processo-sticky h2 { font-family: var(--display); font-size: clamp(2.5rem, 4vw, 4rem); line-height: 0.95; margin-bottom: 1.5rem; }
-.processo-sticky p { font-size: 0.85rem; font-family: var(--mono); color: var(--mid); line-height: 1.8; }
-.processo-items { display: flex; flex-direction: column; }
-.processo-item {
-  padding: 2.5rem 0; border-bottom: 1px solid rgba(58,53,48,0.8);
-  display: grid; grid-template-columns: 80px 1fr; gap: 2rem;
-}
-.processo-item:first-child { border-top: 1px solid rgba(58,53,48,0.8); }
-.pi-num {
-  font-family: var(--display); font-size: 3.5rem;
-  color: rgba(200,150,62,0.15); line-height: 1; transition: color 0.3s;
-}
-.processo-item:hover .pi-num { color: rgba(200,150,62,0.5); }
-.pi-content h3 { font-family: var(--display); font-size: 1.6rem; letter-spacing: 0.05em; margin-bottom: 0.75rem; }
-.pi-content p { font-size: 0.9rem; font-weight: 300; color: var(--mid); line-height: 1.8; }
-
-/* ── SOBRE ────────────────────────────────────────── */
-#sobre { padding: 8rem 4rem; }
-.sobre-inner { max-width: 1100px; margin: 0 auto; display: grid; grid-template-columns: 1fr 1fr; gap: 6rem; align-items: center; }
-.sobre-visual { position: relative; }
-.sobre-photo {
-  width: 100%; aspect-ratio: 3/4; object-fit: cover;
-  filter: grayscale(0.15); display: block;
-}
-.sobre-photo-placeholder {
-  width: 100%; aspect-ratio: 3/4;
-  background: var(--dim); position: relative; overflow: hidden;
-  display: flex; align-items: center; justify-content: center; flex-direction: column; gap: 1rem;
-}
-.sobre-photo-placeholder::before {
-  content: ''; position: absolute; inset: 0;
-  background: linear-gradient(135deg, rgba(200,150,62,0.1) 0%, transparent 50%),
-              linear-gradient(315deg, rgba(158,61,43,0.1) 0%, transparent 50%);
-}
-.photo-label { font-family: var(--mono); font-size: 0.65rem; letter-spacing: 0.2em; color: var(--mid); text-transform: uppercase; text-align: center; line-height: 2; position: relative; }
-.frame-tl { position: absolute; top: -16px; left: -16px; width: 60px; height: 60px; border-top: 2px solid var(--amber); border-left: 2px solid var(--amber); opacity: 0.4; }
-.frame-br { position: absolute; bottom: -16px; right: -16px; width: 60px; height: 60px; border-bottom: 2px solid var(--amber); border-right: 2px solid var(--amber); opacity: 0.4; }
-.sobre-text h2 { font-family: var(--display); font-size: clamp(2.5rem, 4vw, 4rem); line-height: 0.95; margin-bottom: 2rem; }
-.sobre-text p { font-size: 1rem; font-weight: 300; color: rgba(242,237,230,0.7); line-height: 1.85; margin-bottom: 1.5rem; }
-.sobre-tags { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 2rem; }
-.tag {
-  font-family: var(--mono); font-size: 0.6rem; letter-spacing: 0.15em;
-  text-transform: uppercase; padding: 0.4rem 0.9rem;
-  border: 1px solid var(--dim); color: var(--mid);
-  transition: border-color 0.3s, color 0.3s; cursor: none;
-}
-.tag:hover { border-color: var(--amber); color: var(--amber); }
-
-/* ── CONTATO ──────────────────────────────────────── */
-#contato { padding: 8rem 4rem; background: #090807; text-align: center; }
-.contato-inner { max-width: 700px; margin: 0 auto; }
-.contato-inner h2 { font-family: var(--display); font-size: clamp(3rem, 6vw, 6rem); line-height: 0.9; margin-bottom: 2rem; }
-.contato-inner h2 span { color: var(--amber); }
-.contato-inner > p { font-size: 1rem; font-weight: 300; font-style: italic; color: rgba(242,237,230,0.5); margin-bottom: 3rem; }
-.social-links { display: flex; justify-content: center; flex-wrap: wrap; gap: 2.5rem; list-style: none; margin-bottom: 3rem; }
-.social-links a { font-family: var(--mono); font-size: 0.7rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--mid); text-decoration: none; transition: color 0.3s; }
-.social-links a:hover { color: var(--amber); }
-.contato-email {
-  font-family: var(--display); font-size: clamp(1.2rem, 2.5vw, 2rem);
-  letter-spacing: 0.05em; color: var(--paper); text-decoration: none;
-  border-bottom: 1px solid var(--dim); padding-bottom: 4px;
-  transition: border-color 0.3s, color 0.3s;
-}
-.contato-email:hover { color: var(--amber); border-color: var(--amber); }
-
-/* ── MOBILE ───────────────────────────────────────── */
-@media (max-width: 900px) {
-  #hero { grid-template-columns: 1fr; }
-  .hero-left { padding: 7rem 1.5rem 3rem; }
-  .hero-right { padding: 2rem 1.5rem 4rem; }
-  .hero-disciplines { padding: 0; }
-  #manifesto { padding: 5rem 1.5rem; }
-  #universos { padding: 5rem 1.5rem; }
-  .universos-intro { grid-template-columns: 1fr; gap: 2rem; }
-  .universos-grid { grid-template-columns: 1fr; }
-  .universo-card.wide { grid-column: span 1; }
-  #obras { padding: 5rem 1.5rem; }
-  #processo { padding: 5rem 1.5rem; }
-  .processo-grid { grid-template-columns: 1fr; gap: 3rem; }
-  .processo-sticky { position: static; }
-  #sobre { padding: 5rem 1.5rem; }
-  .sobre-inner { grid-template-columns: 1fr; gap: 3rem; }
-  #contato { padding: 5rem 1.5rem; }
-}
-</style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Branca! — Artista Musical</title>
+  <meta name="description" content="Site oficial de Branca! — música, shows, booking e mais.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-<div class="cursor" id="cursor"></div>
-<div class="cursor-ring" id="cursorRing"></div>
-
-<nav>
-  <a href="#" class="nav-logo">MAURICIO BRANCALION</a>
-  <ul class="nav-links">
-    <li><a href="#universos">Universos</a></li>
-    <li><a href="#obras">Obras</a></li>
-    <li><a href="#sobre">Sobre</a></li>
+<!-- ===== NAVEGAÇÃO ===== -->
+<nav id="navbar">
+  <a href="#hero" class="nav-logo">branca<span>!</span></a>
+  <ul class="nav-links" id="navLinks">
+    <li><a href="#bio">Bio</a></li>
+    <li><a href="#musicas">Músicas</a></li>
+    <li><a href="#shows">Shows</a></li>
     <li><a href="#contato">Contato</a></li>
   </ul>
+  <button class="menu-toggle" id="menuToggle" aria-label="Menu">
+    <span></span><span></span><span></span>
+  </button>
 </nav>
 
-<!-- ── HERO ── -->
+<!-- ===== HERO ===== -->
 <section id="hero">
   <div class="hero-bg"></div>
-  <div class="hero-grain"></div>
-  <div class="hero-left">
-    <p class="hero-eyebrow">Garopaba, Brasil — Estúdio Brancalion</p>
-    <h1 class="hero-name">
-      Mauricio<br>
-      <span>Brancalion</span>
-    </h1>
-    <p class="hero-tagline">Artista, ilustrador, músico, animador, escritor. Um universo criativo em permanente expansão.</p>
-    <div class="hero-cta">
-      <a href="#universos" class="btn-primary">Explorar universos</a>
-      <a href="#sobre" class="btn-ghost">Sobre o artista</a>
-    </div>
+  <div class="hero-content">
+    <h1>Branca<span>!</span></h1>
+    <p class="hero-tagline">Groove com alma brasileira</p>
+    <a href="#musicas" class="hero-cta">Ouça agora</a>
   </div>
-  <div class="hero-right">
-    <div class="hero-right-inner">
-      <div class="hero-photo-wrap">
-        <img src="images/artista.jpg" alt="Mauricio Brancalion" class="hero-photo"
-          onerror="this.style.display='none';document.getElementById('hero-photo-ph').style.display='flex'">
-        <div class="hero-photo-ph" id="hero-photo-ph" style="display:none">
-          <span>sua<br>foto<br>aqui</span>
+</section>
+
+<!-- ===== BIO ===== -->
+<section id="bio">
+  <div class="container reveal">
+    <span class="section-label">Sobre</span>
+    <h2>A história</h2>
+    <div class="divider"></div>
+    <div class="bio-grid">
+      <div class="bio-text">
+        <p>Branca! é o projeto solo de um artista com mais de 20 anos compondo e construindo um universo musical próprio. Nascido de uma longa trajetória de criação, o projeto ganhou nova intensidade desde a chegada a Garopaba — vila litorânea de Santa Catarina onde o mar, o surf e a natureza viraram combustível criativo.
+Com influências enraizadas na herança musical festiva e alegre do Brasil, Branca! encontrou nesse canto do litoral o lugar que faltava: um groove dançante que carrega o balanço das ondas, o calor das festas populares e letras que falam de amor com a alma bem brasileira.</p>
+        <p>Cada música é um convite — pra balançar, pra sentir e pra se reconhecer.</p>
+        <div class="bio-stats">
+          <div class="stat"><div class="stat-num">500K+</div><div class="stat-label">Streams</div></div>
+          <div class="stat"><div class="stat-num">12</div><div class="stat-label">Shows</div></div>
+          <div class="stat"><div class="stat-num">3</div><div class="stat-label">Singles</div></div>
         </div>
-        <div class="hero-photo-frame-tl"></div>
-        <div class="hero-photo-frame-br"></div>
-      </div>
-      <div class="hero-disciplines">
-        <div class="discipline-item"><span class="d-num">01</span>Quadrinhos</div>
-        <div class="discipline-item"><span class="d-num">02</span>Animação</div>
-        <div class="discipline-item"><span class="d-num">03</span>Ilustração</div>
-        <div class="discipline-item"><span class="d-num">04</span>Música</div>
-        <div class="discipline-item"><span class="d-num">05</span>Games</div>
-        <div class="discipline-item"><span class="d-num">06</span>Apps</div>
-        <div class="discipline-item"><span class="d-num">07</span>Design</div>
       </div>
     </div>
   </div>
 </section>
 
-<div class="divider"></div>
+<!-- ===== MÚSICAS ===== -->
+<section id="musicas">
+  <div class="container reveal">
+    <span class="section-label">Ouça</span>
+    <h2>Músicas</h2>
+    <div class="divider"></div>
+    <div class="music-layout">
+      <div class="album-art"><img src="album-cover.png" alt="Capa do álbum"></div>
+      <div>
+        <div class="tracklist" id="tracklist">
 
-<!-- ── MANIFESTO ── -->
-<section id="manifesto">
-  <div class="section-label">Manifesto</div>
-  <p class="manifesto-text reveal">
-    Não existe fronteira entre as artes —
-    existe o <strong>artista que a atravessa</strong>.<br>
-    Cada disciplina alimenta a outra.
-    O traço informa a animação,<br>
-    a música guia o ritmo visual,
-    a história sustenta o game.<br>
-    Tudo é <strong>uma linguagem única</strong>.
-  </p>
-  <p class="manifesto-sub reveal">
-    Quadrinhos desde 2001 · Publicado na Folha de São Paulo · Estúdio ativo há mais de 20 anos<br>
-    Garopaba, Santa Catarina — onde o oceano inspira tudo
-  </p>
-</section>
-
-<div class="divider"></div>
-
-<!-- ── UNIVERSOS ── -->
-<section id="universos">
-  <div class="universos-intro reveal">
-    <div>
-      <div class="section-label left">O trabalho</div>
-      <h2>Os<br>Universos</h2>
-    </div>
-    <p>Cada área é um mundo autônomo e ao mesmo tempo parte de um mesmo cosmos criativo. Explore cada dimensão do trabalho.</p>
-  </div>
-  <div class="universos-grid" id="universos-grid">
-    <!-- preenchido via JS -->
-  </div>
-</section>
-
-<div class="divider"></div>
-
-<!-- ── OBRAS ── -->
-<section id="obras">
-  <div class="section-label">Portfólio</div>
-  <div class="universos-intro reveal" style="margin-bottom:3rem">
-    <div><h2>As<br>Obras</h2></div>
-    <p>Uma seleção de trabalhos através de todas as linguagens. Use os filtros para navegar por universo.</p>
-  </div>
-  <div class="obras-tabs" id="obras-nav">
-    <!-- abas preenchidas via JS -->
-  </div>
-  <div id="obras-panels">
-    <!-- painéis preenchidos via JS -->
-  </div>
-</section>
-
-<div class="divider"></div>
-
-<!-- ── PROCESSO ── -->
-<section id="processo">
-  <div class="processo-inner">
-    <div class="processo-grid">
-      <div class="processo-sticky reveal">
-        <div class="section-label left">Método</div>
-        <h2>Como<br>tudo<br>nasce</h2>
-        <p>Um olhar sobre o processo criativo que atravessa todas as linguagens.</p>
-      </div>
-      <div class="processo-items reveal">
-        <div class="processo-item">
-          <div class="pi-num">01</div>
-          <div class="pi-content">
-            <h3>Observação</h3>
-            <p>Tudo começa no cotidiano. Uma conversa, um absurdo urbano, uma onda. O material bruto está sempre ao redor — basta o olhar treinado para capturá-lo.</p>
+          <div class="track" data-track="1" data-title="Anoiteceu" data-src="Anoiteceu Stereo_mixagem.mp3">
+            <button class="play-btn" aria-label="Play">▶</button>
+            <span class="track-num">01</span>
+            <div class="track-info">
+              <div class="track-title">Anoiteceu</div>
+              <div class="track-artist">Branca!</div>
+            </div>
+            <span class="track-dur">—</span>
           </div>
-        </div>
-        <div class="processo-item">
-          <div class="pi-num">02</div>
-          <div class="pi-content">
-            <h3>Linguagem</h3>
-            <p>A ideia escolhe o suporte. Às vezes é um quadrinho de quatro quadros, às vezes uma animação, às vezes uma canção. A forma serve o conteúdo, nunca o contrário.</p>
+
+          <div class="track" data-track="2" data-title="Veranez" data-src="veranez.mp3">
+            <button class="play-btn" aria-label="Play">▶</button>
+            <span class="track-num">02</span>
+            <div class="track-info">
+              <div class="track-title">Veranez</div>
+              <div class="track-artist">Branca!</div>
+            </div>
+            <span class="track-dur">—</span>
           </div>
-        </div>
-        <div class="processo-item">
-          <div class="pi-num">03</div>
-          <div class="pi-content">
-            <h3>Contaminação</h3>
-            <p>As linguagens se alimentam. O ritmo aprendido na música organiza o quadrinho. O timing da animação enriquece a tira. Nenhum trabalho é isolado.</p>
+
+          <div class="track" data-track="3" data-title="Desenho de Mar" data-src="desenho-de-mar.mp3">
+            <button class="play-btn" aria-label="Play">▶</button>
+            <span class="track-num">03</span>
+            <div class="track-info">
+              <div class="track-title">Desenho de Mar</div>
+              <div class="track-artist">Branca!</div>
+            </div>
+            <span class="track-dur">—</span>
           </div>
+
         </div>
-        <div class="processo-item">
-          <div class="pi-num">04</div>
-          <div class="pi-content">
-            <h3>Entrega</h3>
-            <p>Cada projeto — autoral ou comercial — carrega o mesmo cuidado e a mesma assinatura. A consistência do olhar é o que define um artista, não a disciplina escolhida.</p>
+        <!-- Player bar -->
+        <div class="player-bar" id="playerBar">
+          <button class="play-btn" id="playerToggle" aria-label="Play/Pause">▶</button>
+          <div class="now-playing">
+            <div class="now-title" id="nowTitle">—</div>
+            <div class="now-artist">Branca!</div>
+            <div class="progress-bar" id="progressBar">
+              <div class="progress-fill" id="progressFill"></div>
+            </div>
           </div>
+          <span class="track-dur" id="nowDur">0:00</span>
         </div>
       </div>
     </div>
   </div>
 </section>
 
-<div class="divider"></div>
-
-<!-- ── SOBRE ── -->
-<section id="sobre">
-  <div class="sobre-inner">
-    <div class="sobre-visual reveal">
-      <div id="sobre-foto-wrapper" style="width:100%;aspect-ratio:3/4;position:relative;">
-        <img src="images/artista.jpg" alt="Mauricio Brancalion" class="sobre-photo"
-          onerror="this.style.display='none';document.getElementById('sobre-foto-ph').style.display='flex'">
-        <div class="sobre-photo-placeholder" id="sobre-foto-ph" style="display:none;position:absolute;inset:0">
-          <div class="photo-label">Adicione aqui<br>sua foto ou<br>ilustração</div>
-        </div>
+<!-- ===== SHOWS ===== -->
+<section id="shows">
+  <div class="container reveal">
+    <span class="section-label">Ao vivo</span>
+    <h2>Próximos shows</h2>
+    <div class="divider"></div>
+    <div class="shows-list">
+      <div class="show-item">
+        <div class="show-date"><div class="show-day">06</div><div class="show-month">Jun</div></div>
+        <div class="show-info"><h3>Quermesse de Garopaba</h3><p>Garopaba, SC</p></div>
+        <button class="btn-ticket" disabled>Realizado</button>
       </div>
-      <div class="frame-tl"></div>
-      <div class="frame-br"></div>
-    </div>
-    <div class="sobre-text reveal">
-      <div class="section-label left">Sobre</div>
-      <h2>Artista<br>em<br>Garopaba</h2>
-      <p id="sobre-bio-1">Mauricio Brancalion cria desde sempre. Começou pelas tiras de humor, passou pela animação, chegou aos apps, games e à música — sem nunca abandonar nenhum caminho anterior.</p>
-      <p id="sobre-bio-2">À beira do oceano em Garopaba, Santa Catarina, dirige o Estúdio Brancalion e desenvolve projetos que transitam entre o artesanal e o tecnológico, o popular e o experimental.</p>
-      <p>Fundador da Editora Carayba, dedicada a quadrinhos e literatura com raízes na cultura Tupi-Guarani. Surfista. Observador.</p>
-      <div class="sobre-tags">
-        <span class="tag">Garopaba · SC</span>
-        <span class="tag">Estúdio Brancalion</span>
-        <span class="tag">Editora Carayba</span>
-        <span class="tag">@segundoucomorestes</span>
-        <span class="tag">Desde 2001</span>
+      <div class="show-item">
+        <div class="show-date"><div class="show-day">12</div><div class="show-month">Jul</div></div>
+        <div class="show-info"><h3>Live — Canal do YouTube</h3><p>Online</p></div>
+        <button class="btn-ticket">Assistir</button>
       </div>
     </div>
   </div>
 </section>
 
-<!-- ── CONTATO ── -->
+<!-- ===== CONTATO ===== -->
 <section id="contato">
-  <div class="contato-inner reveal">
-    <div class="section-label">Contato</div>
-    <h2>Vamos<br><span>conversar</span></h2>
-    <p>Para projetos, colaborações, palestras ou só para trocar uma ideia.</p>
-    <ul class="social-links" id="social-links">
-      <!-- preenchido via JS -->
-    </ul>
-    <a href="mailto:contato@mauriciobrancalion.com.br" class="contato-email" id="contato-email">
-      contato@mauriciobrancalion.com.br
-    </a>
+  <div class="container reveal">
+    <span class="section-label">Fale conosco</span>
+    <h2>Contato & Booking</h2>
+    <div class="divider"></div>
+    <div class="contact-grid">
+      <div class="contact-info">
+        <p>Para booking, parcerias ou qualquer outro assunto, preencha o formulário ao lado ou envie um e-mail para <a href="mailto:mauricio.brancalion@gmail.com">mauricio.brancalion@gmail.com</a></p>
+        <div class="social-links">
+          <a href="https://www.instagram.com/mauriciobrancalion" target="_blank" rel="noopener" aria-label="Instagram">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 1.366.062 2.633.334 3.608 1.308.975.975 1.246 2.242 1.308 3.608.058 1.266.07 1.646.07 4.85s-.012 3.584-.07 4.85c-.062 1.366-.334 2.633-1.308 3.608-.975.975-2.242 1.246-3.608 1.308-1.266.058-1.646.07-4.85.07s-3.584-.012-4.85-.07c-1.366-.062-2.633-.334-3.608-1.308-.975-.975-1.246-2.242-1.308-3.608C2.175 15.584 2.163 15.204 2.163 12s.012-3.584.07-4.85c.062-1.366.334-2.633 1.308-3.608.975-.975 2.242-1.246 3.608-1.308C8.416 2.175 8.796 2.163 12 2.163zm0-2.163C8.741 0 8.332.014 7.052.072 5.197.157 3.355.673 2.014 2.014.673 3.355.157 5.197.072 7.052.014 8.332 0 8.741 0 12c0 3.259.014 3.668.072 4.948.085 1.855.601 3.697 1.942 5.038 1.341 1.341 3.183 1.857 5.038 1.942C8.332 23.986 8.741 24 12 24s3.668-.014 4.948-.072c1.855-.085 3.697-.601 5.038-1.942 1.341-1.341 1.857-3.183 1.942-5.038.058-1.28.072-1.689.072-4.948s-.014-3.668-.072-4.948c-.085-1.855-.601-3.697-1.942-5.038C20.645.673 18.803.157 16.948.072 15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 1 0 0 12.324 6.162 6.162 0 0 0 0-12.324zm0 10.162a4 4 0 1 1 0-8 4 4 0 0 1 0 8zm6.406-11.845a1.44 1.44 0 1 0 0 2.881 1.44 1.44 0 0 0 0-2.881z"/></svg>
+          </a>
+          <a href="https://www.youtube.com/@mauriciobrancalion" target="_blank" rel="noopener" aria-label="YouTube">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M23.495 6.205a3.007 3.007 0 0 0-2.088-2.088c-1.87-.501-9.396-.501-9.396-.501s-7.507-.01-9.396.501A3.007 3.007 0 0 0 .527 6.205a31.247 31.247 0 0 0-.522 5.805 31.247 31.247 0 0 0 .522 5.783 3.007 3.007 0 0 0 2.088 2.088c1.868.502 9.396.502 9.396.502s7.506 0 9.396-.502a3.007 3.007 0 0 0 2.088-2.088 31.247 31.247 0 0 0 .5-5.783 31.247 31.247 0 0 0-.5-5.805zM9.609 15.601V8.408l6.264 3.602z"/></svg>
+          </a>
+          <a href="https://open.spotify.com/intl-pt/artist/0hDMFi9hC7xFhLczcDM0tz?si=Kcowm-bwRRGkhLsQZmN9Jg" target="_blank" rel="noopener" aria-label="Spotify">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.4 0 0 5.4 0 12s5.4 12 12 12 12-5.4 12-12S18.66 0 12 0zm5.521 17.34c-.24.359-.66.48-1.021.24-2.82-1.74-6.36-2.101-10.561-1.141-.418.122-.779-.179-.899-.539-.12-.421.18-.78.54-.9 4.56-1.021 8.52-.6 11.64 1.32.42.18.479.659.301 1.02zm1.44-3.3c-.301.42-.841.6-1.262.3-3.239-1.98-8.159-2.58-11.939-1.38-.479.12-1.02-.12-1.14-.6-.12-.48.12-1.021.6-1.141C9.6 9.9 15 10.561 18.72 12.84c.361.181.54.78.241 1.2zm.12-3.36C15.24 8.4 8.82 8.16 5.16 9.301c-.6.179-1.2-.181-1.38-.721-.18-.601.18-1.2.72-1.381 4.26-1.26 11.28-1.02 15.721 1.621.539.3.719 1.02.419 1.56-.299.421-1.02.599-1.559.3z"/></svg>
+          </a>
+        </div>
+      </div>
+      <form class="contact-form" id="contactForm">
+        <input type="text" id="inputNome" name="nome" placeholder="Seu nome" required>
+        <input type="email" id="inputEmail" name="email" placeholder="Seu e-mail" required>
+        <textarea id="inputMsg" name="mensagem" placeholder="Sua mensagem" required></textarea>
+        <button type="submit" class="btn-send">Enviar mensagem</button>
+      </form>
+    </div>
   </div>
 </section>
 
+<!-- ===== FOOTER ===== -->
 <footer>
-  <p>© <span id="ano"></span> Mauricio Brancalion — Estúdio Brancalion</p>
-  <p>Garopaba, Santa Catarina, Brasil</p>
+  <p>&copy; 2026 Branca! — Todos os direitos reservados.</p>
 </footer>
 
-<script src="assets/js/main.js"></script>
+<!-- Player de áudio real -->
+<audio id="audioPlayer" preload="none"></audio>
+
 <script>
-document.getElementById('ano').textContent = new Date().getFullYear();
+/* ===== NAV: scroll & mobile menu ===== */
+const nav = document.getElementById('navbar');
+const toggle = document.getElementById('menuToggle');
+const links = document.getElementById('navLinks');
 
-// Carrega dados do JSON e popula o site
-fetch('dados.json')
-  .then(r => r.json())
-  .then(data => {
-    // Universos grid
-    const grid = document.getElementById('universos-grid');
-    data.universos.forEach(u => {
-      const a = document.createElement('a');
-      a.href = `obras/${u.id}.html`;
-      a.className = 'universo-card' + (u.destaque ? ' wide' : '');
-      a.style.setProperty('--card-color', u.cor);
-      a.innerHTML = `
-        <div class="card-num">${u.num} — ${u.titulo.split('&')[0].trim()}</div>
-        <div class="card-title">${u.titulo}</div>
-        <p class="card-desc">${u.descricao}</p>
-        <span class="card-arrow">↗</span>`;
-      grid.appendChild(a);
-    });
+window.addEventListener('scroll', () => {
+  nav.classList.toggle('scrolled', window.scrollY > 50);
+});
 
-    // Obras nav + panels
-    const nav = document.getElementById('obras-nav');
-    const panels = document.getElementById('obras-panels');
+toggle.addEventListener('click', () => {
+  links.classList.toggle('open');
+});
 
-    data.universos.forEach((u, i) => {
-      // botão
-      const btn = document.createElement('button');
-      btn.className = 'obras-nav-btn' + (i === 0 ? ' active' : '');
-      btn.textContent = u.titulo.split('&')[0].trim().split(' ')[0];
-      btn.dataset.target = u.id;
-      btn.addEventListener('click', () => {
-        document.querySelectorAll('.obras-nav-btn').forEach(b => b.classList.remove('active'));
-        document.querySelectorAll('.obras-panel').forEach(p => p.classList.remove('active'));
-        btn.classList.add('active');
-        document.getElementById('panel-' + u.id).classList.add('active');
-      });
-      nav.appendChild(btn);
+links.querySelectorAll('a').forEach(a => {
+  a.addEventListener('click', () => links.classList.remove('open'));
+});
 
-      // painel
-      const panel = document.createElement('div');
-      panel.className = 'obras-panel' + (i === 0 ? ' active' : '');
-      panel.id = 'panel-' + u.id;
+/* ===== NAV: active link on scroll ===== */
+const sections = document.querySelectorAll('section');
+const navAnchors = links.querySelectorAll('a');
 
-      const obras = data.obras[u.id] || [];
-      if (obras.length === 0) {
-        panel.innerHTML = `<div class="obras-vazio">
-          Obras em breve.<br>
-          <span style="color:var(--amber)">Use o painel admin para adicionar.</span>
-        </div>`;
-      } else {
-        const g = document.createElement('div');
-        g.className = 'obras-grid';
-        obras.forEach(o => {
-          const card = document.createElement('div');
-          card.className = 'obra-card';
-          card.innerHTML = o.imagem
-            ? `<img src="${o.imagem}" alt="${o.titulo}" loading="lazy">
-               <div class="obra-info">
-                 <div class="obra-titulo">${o.titulo}</div>
-                 <div class="obra-ano">${o.ano}</div>
-               </div>`
-            : `<div class="obra-placeholder">
-                 <span class="obra-placeholder-txt">${o.titulo}</span>
-               </div>
-               <div class="obra-info">
-                 <div class="obra-titulo">${o.titulo}</div>
-                 <div class="obra-ano">${o.ano}</div>
-               </div>`;
-          g.appendChild(card);
-        });
-        panel.appendChild(g);
-      }
-      panels.appendChild(panel);
-    });
+window.addEventListener('scroll', () => {
+  let current = '';
+  sections.forEach(s => {
+    if (window.scrollY >= s.offsetTop - 200) current = s.id;
+  });
+  navAnchors.forEach(a => {
+    a.classList.toggle('active', a.getAttribute('href') === '#' + current);
+  });
+});
 
-    // Redes sociais
-    const sl = document.getElementById('social-links');
-    data.artista.redes.forEach(r => {
-      const li = document.createElement('li');
-      li.innerHTML = `<a href="${r.url}" target="_blank" rel="noopener">${r.handle}</a>`;
-      sl.appendChild(li);
-    });
+/* ===== REVEAL on scroll ===== */
+const reveals = document.querySelectorAll('.reveal');
+const revealObs = new IntersectionObserver((entries) => {
+  entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+}, { threshold: 0.15 });
+reveals.forEach(el => revealObs.observe(el));
 
-    // Email
-    const em = document.getElementById('contato-email');
-    em.href = 'mailto:' + data.artista.email;
-    em.textContent = data.artista.email;
+/* ===== MUSIC PLAYER (real) ===== */
+const audio = document.getElementById('audioPlayer');
+const tracklist = document.getElementById('tracklist');
+const playerBar = document.getElementById('playerBar');
+const nowTitle = document.getElementById('nowTitle');
+const nowDur = document.getElementById('nowDur');
+const progressFill = document.getElementById('progressFill');
+const progressBar = document.getElementById('progressBar');
+const playerToggle = document.getElementById('playerToggle');
 
-    // Foto
-    if (data.artista.foto && data.artista.foto !== 'assets/images/artista.jpg') {
-      const fotoEl = document.getElementById('sobre-foto');
-      fotoEl.outerHTML = `<img src="${data.artista.foto}" alt="Mauricio Brancalion" class="sobre-photo">`;
-    }
-  })
-  .catch(() => console.warn('dados.json não encontrado — usando conteúdo estático.'));
+function formatTime(sec) {
+  const m = Math.floor(sec / 60);
+  const s = String(Math.floor(sec % 60)).padStart(2, '0');
+  return `${m}:${s}`;
+}
 
-// ── ANIMAÇÃO DAS DISCIPLINAS ─────────────────────────
-(function() {
-  const items = document.querySelectorAll('.discipline-item');
-  if (!items.length) return;
-  let atual = 0;
-  function acender() {
-    items.forEach(el => el.classList.remove('lit'));
-    items[atual].classList.add('lit');
-    atual = (atual + 1) % items.length;
+tracklist.querySelectorAll('.track').forEach(track => {
+  track.addEventListener('click', () => {
+    tracklist.querySelectorAll('.track').forEach(t => t.classList.remove('active'));
+    track.classList.add('active');
+    playerBar.classList.add('visible');
+    nowTitle.textContent = track.dataset.title;
+    audio.src = track.dataset.src;
+    audio.play();
+    playerToggle.textContent = '⏸';
+  });
+});
+
+playerToggle.addEventListener('click', () => {
+  if (audio.paused) {
+    audio.play();
+    playerToggle.textContent = '⏸';
+  } else {
+    audio.pause();
+    playerToggle.textContent = '▶';
   }
-  // Começa depois das animações de entrada
-  setTimeout(() => {
-    acender();
-    setInterval(acender, 1800);
-  }, 2000);
-})();
+});
+
+// Clique na barra de progresso para seek
+progressBar.addEventListener('click', (e) => {
+  if (!audio.duration) return;
+  const rect = progressBar.getBoundingClientRect();
+  const pct = (e.clientX - rect.left) / rect.width;
+  audio.currentTime = pct * audio.duration;
+});
+
+audio.addEventListener('timeupdate', () => {
+  if (audio.duration) {
+    const pct = (audio.currentTime / audio.duration) * 100;
+    progressFill.style.width = pct + '%';
+    nowDur.textContent = formatTime(audio.currentTime) + ' / ' + formatTime(audio.duration);
+  }
+});
+
+audio.addEventListener('ended', () => {
+  playerToggle.textContent = '▶';
+  progressFill.style.width = '0%';
+  nowDur.textContent = '0:00';
+  // Remove active da faixa atual
+  tracklist.querySelectorAll('.track').forEach(t => t.classList.remove('active'));
+});
+
+audio.addEventListener('error', () => {
+  nowTitle.textContent = 'Erro ao carregar áudio';
+});
+
+/* ===== FORMULÁRIO ===== */
+document.getElementById('contactForm').addEventListener('submit', function(e) {
+  e.preventDefault();
+  const nome = document.getElementById('inputNome').value;
+  const email = document.getElementById('inputEmail').value;
+  const msg = document.getElementById('inputMsg').value;
+  const assunto = encodeURIComponent('Contato via site — ' + nome);
+  const corpo = encodeURIComponent('Nome: ' + nome + '\nE-mail: ' + email + '\n\n' + msg);
+  window.location.href = 'mailto:mauricio.brancalion@gmail.com?subject=' + assunto + '&body=' + corpo;
+});
 </script>
 </body>
 </html>
